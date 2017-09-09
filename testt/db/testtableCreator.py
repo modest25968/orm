@@ -5,11 +5,8 @@ import unittest
 
 class TestTableCreator(unittest.TestCase):
     def testEscenceCreate(self):
-        #for i in range(2):
-            d = Disp.inst()
-            tc = TableCreator()
-            tc.createEssenceTable(True)
-            #d.exec()
+        tc = TableCreator()
+        tc.createStructEssenceTable()
 
 if __name__ == '__main__':
     unittest.main()

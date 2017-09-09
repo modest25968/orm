@@ -3,7 +3,7 @@ from db.disp import Disp
 class TableCreator:
 
     #run only once
-    def createEssenceTable(self, withCommit=True):
+    def createStructEssenceTable(self, withCommit=True):
         Disp.inst().exec("CREATE TABLE essences (id serial PRIMARY KEY, " +
                          "name text);")
 
@@ -12,5 +12,8 @@ class TableCreator:
 
         if withCommit:
             Disp.inst().commit()
+
+    def createEssenceTable(self, withCommit=True):
+        pass
 
 

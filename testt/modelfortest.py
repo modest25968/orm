@@ -2,9 +2,10 @@ import field
 from model import BaseModel
 
 
-class MyModel(BaseModel):
+class User(BaseModel):
     fname = field.CharField()
     lname = field.CharField()
     lenOfPipi = field.IntField()
 
-
+class post(BaseModel):
+    text = field.CharField()
