@@ -1,7 +1,7 @@
 #dispatcher to postgresql
 
 import psycopg2
-from db.base import BaseDispatcher
+from db.disp import BaseDispatcher
 
 
 class PostgresDispatcher(BaseDispatcher):
