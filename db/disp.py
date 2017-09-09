@@ -1,10 +1,13 @@
 import sys
 
-from test.settings import DB_BACKEND
+#from settings import DB_BACKEND
+DB_BACKEND = "postgresql"
 
+import django
 
 class BaseDispatcher:
-    pass
+    def exec(self, text, fetch="false"):
+        pass
 
 
 # singleton

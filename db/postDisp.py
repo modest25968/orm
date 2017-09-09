@@ -8,8 +8,10 @@ class PostgresDispatcher(BaseDispatcher):
     cur = None
     conn = None
 
+
     def __init__(self, namedb="testdb", dbusername="postgres"):
         self.conn = psycopg2.connect("dbname={0} user={1}".format(namedb, dbusername))
+        self.createCursor()
 
     def __del__(self):
         if self.cur:
@@ -17,7 +19,7 @@ class PostgresDispatcher(BaseDispatcher):
         if self.conn:
             self.conn.close()
 
-    def exec(self, text, fetch="false"):
+    def exec(self, text, fetch=False):
         self.cur.execute(text)
         if fetch:
             return self.cur.fetchall()

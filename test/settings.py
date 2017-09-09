@@ -1,9 +1,9 @@
 
-FILES_WITH_MODELS = ["test"]
+FILES_WITH_MODELS = ["testmodel"]
 
 DB_BACKEND = "postgresql"
 DB_USERNAME = "postgres"
-DB_NAME = "testdb"
+DB_NAME = "db"
 
 APP_NAME = "myApp"
 
