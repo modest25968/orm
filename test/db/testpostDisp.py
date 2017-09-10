@@ -5,7 +5,7 @@ import unittest
 
 class TestPostgreDisp(unittest.TestCase):
     def testDB(self):
-        disp = PostgresDispatcher("testdb", "postgres")
+        disp = PostgresDispatcher()# "testdb", "postgres")
         disp.createTestDB()
         disp.exec("CREATE TABLE test (id serial PRIMARY KEY, name text);")
         disp.exec("INSERT INTO  test (name) VALUES ('first')")

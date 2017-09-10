@@ -3,13 +3,21 @@
 import psycopg2
 from db.disp import BaseDispatcher
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-
+import os
+from simple_settings import settings
 class PostgresDispatcher(BaseDispatcher):
     cur = None
     conn = None
 
 
-    def __init__(self, namedb="testdb", dbusername="postgres"):
+    def __init__(self, namedb=None, dbusername=None):
+        os.environ['SIMPLE_SETTINGS'] = "test_settings"
+        if not namedb:
+            namedb = settings.DB_NAME
+
+        if not dbusername:
+            dbusername = settings.DB_USERNAME
+
         self.conn = psycopg2.connect("dbname={0} user={1}".format(namedb, dbusername))
         self.createCursor()
 
