@@ -9,10 +9,11 @@ class TestUtils(unittest.TestCase):
     def testFindModel(self):
         res = findModelsAndFieldsInFiles(["testt/modelfortest.py"])
         self.assertEqual(len(res), 2)
-        sum = 0
+        summ = 0
         for key, val in res.items():
-            sum += len(val)
-        self.assertEqual(sum, 4)
+            summ += len(val)
+        self.assertEqual(summ, 4)
+        print(res)
 
 
 if __name__ == '__main__':

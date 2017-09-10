@@ -1,11 +1,11 @@
 class BaseField:
-    pass
+    sql_type = "None"
 
 
 class CharField(BaseField):
-    pass
+    sql_type = "text"
 
 
 class IntField(BaseField):
-    pass
+    sql_type = "int"
 
