@@ -37,6 +37,11 @@ class TestMigrator(unittest.TestCase):
 
             tc.createEssenceTable((essname, fields))
 
+        res = tc.getAllEssencesFromBd()
+        print(res)
+        print(escences)
+
+
 
 
 

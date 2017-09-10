@@ -35,6 +35,20 @@ class Migrator:
             self._escence_not_change = True
         return self._escence_dict
 
+    def getAllEssencesFromBd(self):
+        sql = "SELECT s.name, sf.name, sf.type FROM essences as s, essences_fields as sf \
+               WHERE s.id = sf.essences_id"
+        res = Disp().inst().exec(sql, True)
+        # склеивание строк
+        # TODO: Найти способ работать со строками и словарями
+        d = dict()
+        for x in res:
+            if x[0] in d:
+                d[x[0]].append((x[1], x[2]))
+            else:
+                d[x[0]] = [(x[1], x[2])]
+        return d
+
     def insertEssenceInfoInEssencesTable(self, Essence, withCommit=True):
         tablename = Essence[0]
         Disp.inst().exec("INSERT INTO essences (name) VALUES ('{0}')".format(tablename))
