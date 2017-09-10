@@ -1,7 +1,11 @@
 from db.disp import Disp
 
 
-class TableCreator:
+class Migrator:
+    def createTestDB(self):
+        Disp.inst().exec("CREATE TABLE IF NOT EXISTS essences (id serial PRIMARY KEY, " +
+                         "name text);")
+
     # run only once
     def createStructEssenceTable(self, withCommit=True):
         Disp.inst().exec("CREATE TABLE IF NOT EXISTS essences (id serial PRIMARY KEY, " +

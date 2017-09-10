@@ -7,5 +7,6 @@ class User(BaseModel):
     lname = field.CharField()
     lenOfPipi = field.IntField()
 
+
 class post(BaseModel):
     text = field.CharField()

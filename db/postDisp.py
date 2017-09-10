@@ -2,7 +2,7 @@
 
 import psycopg2
 from db.disp import BaseDispatcher
-
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 class PostgresDispatcher(BaseDispatcher):
     cur = None
@@ -14,6 +14,9 @@ class PostgresDispatcher(BaseDispatcher):
         self.createCursor()
 
     def __del__(self):
+        self.closeConn()
+
+    def closeConn(self):
         if self.cur:
             self.cur.close()
         if self.conn:
@@ -26,6 +29,20 @@ class PostgresDispatcher(BaseDispatcher):
 
     def commit(self):
         self.conn.commit()
+
+    def createTestDB(self):
+        self.closeConn()
+        conn2 = psycopg2.connect("dbname=postgres user=postgres")
+        conn2.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        cur = conn2.cursor()
+
+        cur.execute("DROP DATABASE IF EXISTS testdb")
+        cur.execute("CREATE DATABASE testdb")
+        cur.close()
+        conn2.close()
+        self.conn = psycopg2.connect("dbname=testdb user=postgres")
+        self.createCursor()
+
 
     def createCursor(self):
         self.cur = self.conn.cursor()

@@ -16,9 +16,9 @@ def findModelsAndFieldsInFiles(filenames):
 
     for filename in filenames:
         #импортирование файла для поиска моделей с полями
-        filename = 'testt/modelfortest.py'
         newfilename = filename.replace("/", ".")
         newfilename = newfilename.replace(".py", "")
+        print("import " + newfilename + " as m")
         exec("import " + newfilename + " as m")
         dm = eval("m.__dict__")
         classes = {}

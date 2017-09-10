@@ -1,13 +1,14 @@
 import unittest
 from utils import isFilesExist, findModelsAndFieldsInFiles
 
+
 class TestUtils(unittest.TestCase):
     def testFileExist(self):
-        self.assertTrue(isFilesExist(["testt/modelfortest.py", "utils.py"]))
+        self.assertTrue(isFilesExist(["modelfortest.py"]))
         self.assertFalse(isFilesExist(["lol"]))
 
     def testFindModel(self):
-        res = findModelsAndFieldsInFiles(["testt/modelfortest.py"])
+        res = findModelsAndFieldsInFiles(["modelfortest.py"])
         self.assertEqual(len(res), 2)
         summ = 0
         for key, val in res.items():

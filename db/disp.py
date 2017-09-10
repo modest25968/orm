@@ -9,6 +9,9 @@ class BaseDispatcher:
     def exec(self, text, fetch="false"):
         pass
 
+    def createTestDB(self):
+        pass
+
 
 # singleton
 class Disp(object):
