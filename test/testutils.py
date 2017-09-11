@@ -14,7 +14,6 @@ class TestUtils(unittest.TestCase):
         for key, val in res.items():
             summ += len(val)
         self.assertEqual(summ, 4)
-        print(res)
 
 
 if __name__ == '__main__':

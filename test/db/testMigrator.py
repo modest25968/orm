@@ -1,62 +1,34 @@
-from db.migrator import Migrator
-# from db.disp import Disp
-import unittest
-from utils import findModelsAndFieldsInFiles
-from db.disp import Disp
-from simple_settings import settings
 import os
+import unittest
+
+from simple_settings import settings
+
+from db.migrator import Migrator
+from db.sqlcreator import SqlCreator
+from db.disp import Disp
+from utils import findModelsAndFieldsInFiles
+
 
 class TestMigrator(unittest.TestCase):
-    def testEscenceStructCreate(self):
-        Disp().inst().createTestDB()
-        tc = Migrator()
-        tc.createStructEssenceTable()
-
-
-    def testEscenceCreate(self):
-        # testStructureCreate
-        Disp().inst().createTestDB()
-        mig = Migrator()
-        mig.createStructEssenceTable()
-
-        os.environ['SIMPLE_SETTINGS'] = "test_settings"
-        essencesFc = findModelsAndFieldsInFiles(settings.FILES_WITH_MODELS)
-
-        # testInsert
-        for essname, ess in essencesFc.items():
-            mig.insertEssenceInfoInEssencesTable(essname)
-
-        res = mig.getAllEssencesNames()
-        self.assertEqual(len(res), 2)
-
-        self.assertIsNotNone(mig.findRecordEssence("Posts"))
-        self.assertIsNotNone(mig.findRecordEssence("Users"))
-        mig.deleteEssenceInfoInEssencesTable("Posts")
-        self.assertIsNone(mig.findRecordEssence("Posts"))
-        mig.insertEssenceInfoInEssencesTable("Posts")
-
-        for essname, fields in essencesFc.items():
-            mig.insertEssenceInfoInEssencesFieldsTable((essname, fields))
-            mig.createEssenceTable((essname, fields))
-
-
-
     def testCompareEssences(self):
-        Disp().inst().createTestDB()
+        Disp.inst().createTestDB()
         mig = Migrator()
+
+        sq = SqlCreator.inst()
+
         os.environ['SIMPLE_SETTINGS'] = "test_settings"
 
-        mig.createStructEssenceTable()
+        sq.createStructEssenceTable()
 
         essencesFc = findModelsAndFieldsInFiles(settings.FILES_WITH_MODELS)
 
         for essname, fields in essencesFc.items():
-            mig.insertEssenceInfoInEssencesTable(essname)
-            mig.insertEssenceInfoInEssencesFieldsTable((essname, fields))
-            mig.createEssenceTable((essname, fields))
+            sq.insertEssenceInfoInEssencesTable(essname)
+            sq.insertEssenceInfoInEssencesFieldsTable((essname, fields))
+            sq.createEssenceTable((essname, fields))
         # test equal
         essencesFc = findModelsAndFieldsInFiles(settings.FILES_WITH_MODELS)
-        essencesFb = mig.getAllEssencesFromDb()
+        essencesFb = sq.getAllEssencesFromDb()
 
         chenges = mig.compareEssencesFromDbAndFromClass(essencesFb, essencesFc)
         for dic in chenges:
@@ -64,7 +36,7 @@ class TestMigrator(unittest.TestCase):
 
         # test Fb more
         essencesFc = findModelsAndFieldsInFiles(settings.FILES_WITH_MODELS)
-        essencesFb = mig.getAllEssencesFromDb()
+        essencesFb = sq.getAllEssencesFromDb()
 
         del essencesFb["Users"]
         chenges = mig.compareEssencesFromDbAndFromClass(essencesFb, essencesFc)
@@ -77,7 +49,7 @@ class TestMigrator(unittest.TestCase):
 
         # test Fc more
         essencesFc = findModelsAndFieldsInFiles(settings.FILES_WITH_MODELS)
-        essencesFb = mig.getAllEssencesFromDb()
+        essencesFb = sq.getAllEssencesFromDb()
 
         del essencesFc["Users"]
         chenges = mig.compareEssencesFromDbAndFromClass(essencesFb, essencesFc)
@@ -90,7 +62,7 @@ class TestMigrator(unittest.TestCase):
 
         # test more field in class
         essencesFc = findModelsAndFieldsInFiles(settings.FILES_WITH_MODELS)
-        essencesFb = mig.getAllEssencesFromDb()
+        essencesFb = sq.getAllEssencesFromDb()
 
         essencesFb["Users"].pop()
         essencesFb["Users"].pop()
@@ -109,7 +81,7 @@ class TestMigrator(unittest.TestCase):
 
         # test more field in db
         essencesFc = findModelsAndFieldsInFiles(settings.FILES_WITH_MODELS)
-        essencesFb = mig.getAllEssencesFromDb()
+        essencesFb = sq.getAllEssencesFromDb()
 
         essencesFc["Users"].pop()
         essencesFc["Users"].pop()
@@ -128,7 +100,7 @@ class TestMigrator(unittest.TestCase):
 
         # test change field
         essencesFc = findModelsAndFieldsInFiles(settings.FILES_WITH_MODELS)
-        essencesFb = mig.getAllEssencesFromDb()
+        essencesFb = sq.getAllEssencesFromDb()
 
         # change type of one field
         essencesFb['Users'][0] = (essencesFb['Users'][0][0], "None")
@@ -147,23 +119,23 @@ class TestMigrator(unittest.TestCase):
         self.assertEqual(len(chenges[2]["Users"][2]), 1)
 
     def testMigrate(self):
-        Disp().inst().createTestDB()
+        Disp.inst().createTestDB()
         mig = Migrator()
         mig.migrate()
         import os
-        self.assertEqual(len(mig.getAllTableNames()), 4)
+        self.assertEqual(len(SqlCreator.inst().getAllTableNames()), 4)
         os.environ['SIMPLE_SETTINGS'] = "test_settings_with_model2"
         mig.migrate()
-        self.assertEqual(len(mig.getAllTableNames()), 5)
+        self.assertEqual(len(SqlCreator.inst().getAllTableNames()), 5)
         os.environ['SIMPLE_SETTINGS'] = "test_settings"
         mig.migrate()
-        self.assertEqual(len(mig.getAllTableNames()), 4)
+        self.assertEqual(len(SqlCreator.inst().getAllTableNames()), 4)
         os.environ['SIMPLE_SETTINGS'] = "test_settings_with_model3"
         mig.migrate()
-        self.assertEqual(len(mig.getAllTableNames()), 4)
+        self.assertEqual(len(SqlCreator.inst().getAllTableNames()), 4)
         os.environ['SIMPLE_SETTINGS'] = "test_settings"
         mig.migrate()
-        self.assertEqual(len(mig.getAllTableNames()), 4)
+        self.assertEqual(len(SqlCreator.inst().getAllTableNames()), 4)
 
 #        settings["FILES_WITH_MODELS"] = ["modelfortestwithnewclass.py"]
 
