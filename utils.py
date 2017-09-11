@@ -18,7 +18,6 @@ def findModelsAndFieldsInFiles(filenames):
         #импортирование файла для поиска моделей с полями
         newfilename = filename.replace("/", ".")
         newfilename = newfilename.replace(".py", "")
-        print("import " + newfilename + " as m")
         exec("import " + newfilename + " as m")
         dm = eval("m.__dict__")
         classes = {}
@@ -32,8 +31,7 @@ def findModelsAndFieldsInFiles(filenames):
                 for nameVar, typeVar in variables.items():
                     if isinstance(typeVar, BaseField) and \
                             (typeVar.__class__.__base__ == BaseField):
-                        fields.append((nameVar, type(typeVar)))
-                        # print("  find field name='"+nameVar+"'", type(typeVar))
+                        fields.append((nameVar, typeVar))
                 classes[className] = fields
 
         return classes
